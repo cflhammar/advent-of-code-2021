@@ -1,15 +1,10 @@
 import { FizzBuzzer } from "../FizzBuzzer/FizzBuzzer";
-import { DivisibleByFiveRule } from "../rules/DivisibleByFiveRule";
-import { DivisibleByThreeRule } from "../rules/DivisibleByThreeRule";
 
 describe("Divisible by five rule", () => {
   let fizzBuzzer: FizzBuzzer;
 
   beforeEach(() => {
-    fizzBuzzer = new FizzBuzzer([
-      new DivisibleByThreeRule(),
-      new DivisibleByFiveRule(),
-    ]);
+    fizzBuzzer = new FizzBuzzer();
   });
 
   it("should match numbers divisible by 3", () => {

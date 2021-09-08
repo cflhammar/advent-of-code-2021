@@ -1,19 +1,14 @@
 import { IRule } from "../rules/IRule";
 
 export class FizzBuzzer {
-  rules: IRule[];
-  constructor(_rules: IRule[]) {
-    this.rules = _rules;
-  }
   answer = (number: number): string => {
-    const words: string[] = this.rules
-      .filter((rule) => rule.matches(number))
-      .map((rule) => rule.word);
-
-    if (words.length > 0) {
-      return words.join("");
-    } else {
-      return number.toString();
+    let answer = "";
+    if (number % 3 == 0) {
+      answer += "Fizz";
     }
+    if (number % 5 == 0) {
+      answer += "Buzz";
+    }
+    return answer.length > 0 ? answer : number.toString();
   };
 }
