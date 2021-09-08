@@ -1,6 +1,6 @@
 För att köra lösningen på samma sätt som på dragningen:
 
-1. Ladda ner och installera Node
+1. Ladda ner och installera Node (https://nodejs.org/en/download) och git (https://git-scm.com/downloads)
 2. Installera typescript och ts-node
 
    1. För windows:
@@ -15,6 +15,8 @@ För att köra lösningen på samma sätt som på dragningen:
 3. Öppna ett konsolfönster och ställ er i den mapp där lösningen ligger. Skriv sedan 'npm install'
 
 4. Nu ska programmet gå att köra, för att kompilera och köra så skriver man ‘ts-node src/index.ts’ i roten av projektet.
+
+projektet har två brancher, 'master' som är det färdiga alternativet med en mer SOLID-implementation men också branchen 'start' som kan behöva lite förfinig. Börja görna från branchen 'start' med 'master' som facit och implementera din egna SOLID-version av FizzBuzz.
 
 Testning:
 för att köra alla tester: 'npm test'
