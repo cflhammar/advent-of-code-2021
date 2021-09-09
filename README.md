@@ -5,18 +5,18 @@ För att köra lösningen på samma sätt som på dragningen:
 
    1. För windows:
       starta en terminal i adminläge och kör:
-      npm install -g typescript
-      npm install -g ts-node
+      'npm install -g typescript' samt
+      'npm install -g ts-node'
    2. För Mac:
       starta en terminal och kör:
-      sudo npm install -g typescript
-      sudo npm install -g ts-node
+      'sudo npm install -g typescript' samt
+      'sudo npm install -g ts-node'
 
 3. Öppna ett konsolfönster och ställ er i den mapp där lösningen ligger. Skriv sedan 'npm install'
 
-4. Nu ska programmet gå att köra, för att kompilera och köra så skriver man ‘ts-node src/index.ts’ i roten av projektet.
+4. Nu ska programmet gå att köra, för att kompilera och köra så skriver man ‘npm start’ i roten av projektet.
 
-projektet har två brancher, 'master' som är det färdiga alternativet med en mer SOLID-implementation men också branchen 'start' som kan behöva lite förfinig. Börja görna från branchen 'start' med 'master' som facit och implementera din egna SOLID-version av FizzBuzz.
+projektet har två brancher, 'master' som är den färdiga varianten som vi slutade med på demon men också branchen 'start' som kan behöva lite förfinig. Börja görna från branchen 'start' med 'master' som facit och implementera din egna version av FizzBuzz.
 
 Testning:
 för att köra alla tester: 'npm test'
