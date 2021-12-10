@@ -1,4 +1,3 @@
-//import { input, testInput } from "./Input/inputTest";
 import { InputReader } from "./Input/InputReader";
 import { uniqueNumber } from "./src/UniqueNumber";
 import { findSignal } from "./src/FindSignal";

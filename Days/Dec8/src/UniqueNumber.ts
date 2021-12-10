@@ -1,19 +1,19 @@
 export function uniqueNumber(numbers: Array<Array<Array<string>>>) {
 	let counter = 0;
-	let signal;
-	for (let i = 0; i < numbers.length; i++) {
-		signal = numbers[i][1];
 
-		for (let k = 0; k < signal.length; k++) {
-			if (
-				signal[k].length === 2 ||
-				signal[k].length === 3 ||
-				signal[k].length === 4 ||
-				signal[k].length === 7
-			) {
+	numbers.forEach((signalAndOutput) => {
+		let signal = signalAndOutput[1];
+
+		signal.forEach((sequence) => {
+			if (numberIsKnown(sequence)) {
 				counter++;
 			}
-		}
-	}
+		});
+	});
 	return counter;
 }
+
+const numberIsKnown = (sequence: string): boolean => {
+	let len = sequence.length;
+	return len === 2 || len === 3 || len === 4 || len === 7;
+};

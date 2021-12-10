@@ -21,20 +21,14 @@ export function findSignal(input: Array<Array<Array<string>>>) {
 			if (pattern.length === 6) _069.push(pattern);
 		});
 
-		const overlap = (string1: string, string2: string) => {
-			let array1 = string1.split("");
-			let array2 = string2.split("");
-			return array1.filter((value) => array2.includes(value)).length;
-		};
-
-		_069.map((pattern) => {
+		_069.forEach((pattern) => {
 			if (overlap(pattern, patternArray[4]) === 4) patternArray[9] = pattern;
 			else if (overlap(pattern, patternArray[1]) === 2)
 				patternArray[0] = pattern;
 			else patternArray[6] = pattern;
 		});
 
-		_235.map((pattern) => {
+		_235.forEach((pattern) => {
 			if (overlap(pattern, patternArray[1]) === 2) patternArray[3] = pattern;
 			else if (overlap(pattern, patternArray[4]) === 3)
 				patternArray[5] = pattern;
@@ -42,7 +36,7 @@ export function findSignal(input: Array<Array<Array<string>>>) {
 		});
 
 		let outputNumber = "";
-		output.map((outputPattern) => {
+		output.forEach((outputPattern) => {
 			for (let i = 0; i < patternArray.length; i++) {
 				if (
 					overlap(outputPattern, patternArray[i]) === patternArray[i].length &&
@@ -58,3 +52,9 @@ export function findSignal(input: Array<Array<Array<string>>>) {
 		return a + b;
 	}, 0);
 }
+
+const overlap = (string1: string, string2: string) => {
+	let array1 = string1.split("");
+	let array2 = string2.split("");
+	return array1.filter((value) => array2.includes(value)).length;
+};
