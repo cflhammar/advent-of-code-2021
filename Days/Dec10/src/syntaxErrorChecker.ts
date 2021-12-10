@@ -6,11 +6,11 @@ export function syntaxErrorChecker(directions: Array<Array<string>>) {
 		for (let k = 0; k < row.length; k++) {
 			let char = row[k];
 
-			if (charIsOpenning(char)) {
+			if (charIsOpening(char)) {
 				stack.push(char);
 			} else {
 				let popChar = stack.pop() || "";
-				if (!matchChar(popChar, char)) {
+				if (!charIsMatching(popChar, char)) {
 					errorScore += getScore(char);
 					break;
 				}
@@ -20,11 +20,11 @@ export function syntaxErrorChecker(directions: Array<Array<string>>) {
 	return errorScore;
 }
 
-const charIsOpenning = (char: string): boolean => {
+const charIsOpening = (char: string): boolean => {
 	return char === "(" || char === "[" || char === "{" || char === "<";
 };
 
-const matchChar = (popChar: string, stackChar: string): boolean => {
+const charIsMatching = (popChar: string, stackChar: string): boolean => {
 	if (popChar === "(" && stackChar === ")") return true;
 	if (popChar === "[" && stackChar === "]") return true;
 	if (popChar === "{" && stackChar === "}") return true;

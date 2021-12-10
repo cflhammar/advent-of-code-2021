@@ -7,7 +7,7 @@ export function closingSequenceScore(directions: Array<Array<string>>) {
 			let stack: Array<string> = [];
 
 			row.map((char) => {
-				if (charIsOpenning(char)) {
+				if (charIsOpening(char)) {
 					stack.unshift(char);
 				} else {
 					stack.shift();
@@ -26,7 +26,7 @@ export function closingSequenceScore(directions: Array<Array<string>>) {
 	return calculateTotalScore(totalScore);
 }
 
-const charIsOpenning = (char: string): boolean => {
+const charIsOpening = (char: string): boolean => {
 	return char === "(" || char === "[" || char === "{" || char === "<";
 };
 
