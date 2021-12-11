@@ -40,7 +40,7 @@ export class OctopusGrid {
 				if (octopus.value === 9 && !octopus.flashed) {
 					octopus.flash();
 					this.flash(x, y);
-				} else if (!octopus.flashed) {
+				} else {
 					octopus.increase();
 				}
 			}
@@ -76,15 +76,15 @@ export class OctopusGrid {
 	isWithinBoundaryAndNotCenter(
 		x: number,
 		y: number,
-		thisx: number,
-		thisy: number
+		centerx: number,
+		centery: number
 	) {
 		return (
 			x >= 0 &&
 			x < this.rows &&
 			y >= 0 &&
 			y < this.cols &&
-			!(x === thisx && y === thisy)
+			!(x === centerx && y === centery)
 		);
 	}
 
