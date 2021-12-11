@@ -9,6 +9,10 @@ export class OctopusGrid {
 		this.rows = grid.length;
 		this.cols = grid[0].length;
 		this.totalFlashes = 0;
+		this.fillGridWithOctopus(grid);
+	}
+
+	fillGridWithOctopus(grid: Array<Array<number>>) {
 		for (let i = 0; i < this.rows; i++) {
 			this.grid[i] = [];
 			for (let k = 0; k < this.cols; k++) {
