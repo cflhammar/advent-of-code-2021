@@ -2,23 +2,11 @@ import { readFileWithDirections } from "./Input/ReadFileWithDirections";
 import { Tree } from "./src/Tree";
 import { treeHandler } from "./src/TreeHandler";
 
-const array = [
-	[
-		[[[4, 3], 4], 4],
-		[7, [[8, 4], 9]],
-	],
-	[1, 1],
-];
-treeHandler(array);
+const input = readFileWithDirections("inputTest.txt");
+console.log(treeHandler(input));
+// const array =
 
-const a = [
-	[
-		[[0, 7], 4],
-		[7, [[8, 4], 9]],
-	],
-	[1, 1],
-];
-const b = [
-	[[[0, 7]], [4, 7, [[8, 4]], [9]]],
-	[1, 1],
-];
+//console.log(tree.getNextPos(tree.tree));
+//let hej = tree.getArray();
+
+//console.log();
