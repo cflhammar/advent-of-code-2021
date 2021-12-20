@@ -21,24 +21,29 @@ export class Cave {
 	}
 
 	explorePath(path: Array<Cave> = [], visitSmallCaveTwice: boolean = true) {
+		let sum = 0;
 		if (this.isEnd) {
 			path.push(this);
-			fs.writeFileSync("output.txt", "1\n", { flag: "a" });
-			return path;
+			return sum + 1;
+		} else {
+			this.connections.forEach((cave) => {
+				let _visitSmallCaveTwice = visitSmallCaveTwice;
+				let skip =
+					!cave.isBig && path.filter((c) => c.name === cave.name).length > 0;
+
+				if (skip && visitSmallCaveTwice) {
+					_visitSmallCaveTwice = false;
+				} else if (skip) {
+					return 0;
+				}
+				if (cave) {
+					return (sum += cave.explorePath(
+						[...path, this],
+						_visitSmallCaveTwice
+					));
+				}
+			});
 		}
-		this.connections.forEach(async (cave) => {
-			let _visitSmallCaveTwice = visitSmallCaveTwice;
-			let skip =
-				!cave.isBig && path.filter((c) => c.name === cave.name).length > 0;
-
-			if (skip && visitSmallCaveTwice) {
-				_visitSmallCaveTwice = false;
-			} else if (skip) {
-				return;
-			}
-
-			return cave.explorePath([...path, this], _visitSmallCaveTwice);
-		});
-		//await Promise.all(this.connections);
+		return sum;
 	}
 }

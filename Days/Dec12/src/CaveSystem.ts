@@ -5,9 +5,7 @@ export class CaveSystem {
 	cave_names: Set<string> = new Set();
 
 	constructor(caveConnections: Array<Array<string>>) {
-		console.log(caveConnections);
 		this.cave_names = new Set(caveConnections.flat());
-		console.log(this.cave_names);
 
 		for (const cave_name of this.cave_names) {
 			this.caves[cave_name] = new Cave(cave_name);
@@ -19,7 +17,9 @@ export class CaveSystem {
 		}
 	}
 
-	async getNumberOfCaves() {
-		let paths = this.caves["start"].explorePath();
+	getNumberOfCaves(part: number) {
+		return part === 1
+			? this.caves["start"].explorePath(undefined, false)
+			: this.caves["start"].explorePath(undefined, true);
 	}
 }

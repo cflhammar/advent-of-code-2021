@@ -1,9 +1,8 @@
 import { readFileWithDirections } from "./Input/ReadFileWithDirections";
-import { CaveExplorer } from "./src/CaveExplorer";
 import { CaveSystem } from "./src/CaveSystem";
 
-const directions = readFileWithDirections("inputTest.txt");
+const directions = readFileWithDirections("input.txt");
 
 const caveSystem = new CaveSystem(directions);
-const num = caveSystem.getNumberOfCaves();
-console.log(num);
+console.log("Task 1: ", caveSystem.getNumberOfCaves(1));
+console.log("Task 2: ", caveSystem.getNumberOfCaves(2));
