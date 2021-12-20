@@ -19,18 +19,8 @@ export class ProcessImage {
 
 	countLit(): number {
 		let counter = 0;
-		for (let x = 0; x < this.image.length; x++) {
-			for (let y = 0; y < this.image[0].length; y++) {
-				counter += this.image[x][y];
-			}
-		}
+		this.image.forEach((row) => row.forEach((e) => (counter += e)));
 		return counter;
-	}
-
-	outputToFile() {
-		this.image.forEach((row) => {
-			fs.writeFileSync("output.txt", row.join("") + "\n", { flag: "a" });
-		});
 	}
 
 	process() {
@@ -46,7 +36,7 @@ export class ProcessImage {
 
 	countNeighbours(_x: number, _y: number) {
 		let binaryString = "";
-		if (this.isBoundry(_x, _y)) {
+		if (this.isWithinBoundry(_x, _y)) {
 			for (let x = _x - 1; x <= _x + 1; x++) {
 				for (let y = _y - 1; y <= _y + 1; y++) {
 					binaryString += this.image[x][y] === 1 ? "1" : "0";
@@ -54,7 +44,7 @@ export class ProcessImage {
 			}
 			return this.getNextValueFromAlgortihm(parseInt(binaryString, 2));
 		} else {
-			return this.gen % 2 === 0 ? 0 : 1;
+			return this.gen % 2 === 0 ? 0 : this.algorithm[0];
 		}
 	}
 
@@ -62,12 +52,18 @@ export class ProcessImage {
 		return this.algorithm[binary];
 	}
 
-	isBoundry(x: number, y: number) {
+	isWithinBoundry(x: number, y: number) {
 		return (
 			x > 0 &&
 			x < this.image.length - 1 &&
 			y > 0 &&
 			y < this.image[0].length - 1
 		);
+	}
+
+	outputToFile() {
+		this.image.forEach((row) => {
+			fs.writeFileSync("output.txt", row.join("") + "\n", { flag: "a" });
+		});
 	}
 }

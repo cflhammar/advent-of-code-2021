@@ -1,9 +1,6 @@
 import fs from "fs";
 
-export function readFileWithDirections(
-	fileName: string,
-	padLen: number
-): number[][] {
+export function readImage(fileName: string, padLen: number): number[][] {
 	const path = __dirname + "/" + fileName;
 	let stringData = fs.readFileSync(path, "utf8").trim().split("\n");
 
@@ -25,4 +22,14 @@ export function readFileWithDirections(
 	);
 
 	return binary;
+}
+
+export function readAlgorithm(fileName: string): number[] {
+	const path = __dirname + "/" + fileName;
+	const algorithm = fs
+		.readFileSync(path, "utf8")
+		.trim()
+		.split("")
+		.map((e) => (e === "#" ? 1 : 0));
+	return algorithm;
 }
