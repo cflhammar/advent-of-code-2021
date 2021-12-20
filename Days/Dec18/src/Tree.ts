@@ -31,9 +31,9 @@ export class Tree {
 		let stop = false;
 		let action = "explode";
 		while (!stop) {
-			// console.log(action);
 			switch (action) {
 				case "explode":
+					this.hasExploded = false;
 					this.explodeTree();
 					newTree = JSON.stringify(this.tree);
 					if (currenTree === newTree) {
@@ -42,6 +42,7 @@ export class Tree {
 					currenTree = newTree;
 					break;
 				case "split":
+					this.hasSplit = false;
 					this.splitTree();
 					newTree = JSON.stringify(this.tree);
 
@@ -57,22 +58,23 @@ export class Tree {
 		return this.getArray();
 	}
 
-	explodeTree(node: Node = this.tree) { LETA EFTER LEVEL 4 MED LÄGST POSISället
-		if (node.level === 4) {
+	hasExploded: boolean = false;
+	explodeTree(node: Node = this.tree) {
+		if (this.hasExploded) {
+			return;
+		} else if (node.level === 4) {
 			let explode = Object.entries(node.numbers)
 				.flat()
 				.map((e: any) => parseInt(e));
 
 			this.explodeNumber(this.tree, explode[0] - 1, explode[1]);
-
 			this.explodeNumber(this.tree, explode[2] + 1, explode[3]);
-
 			this.removeNode(this.tree, explode[0], explode[2]);
 			this.decreasePos(this.tree, explode[0]);
-
+			this.hasExploded = true;
 			return 1;
 		} else {
-			if (node.children.length === 2) {
+			if (node.children.length === 2 && !this.hasExploded) {
 				let childPos1 = this.getNextPos(node.children[0]);
 				let childPos2 = this.getNextPos(node.children[1]);
 				if (childPos1 < childPos2) {
@@ -82,7 +84,7 @@ export class Tree {
 					this.explodeTree(node.children[1]);
 					this.explodeTree(node.children[0]);
 				}
-			} else if (node.children.length === 1) {
+			} else if (node.children.length === 1 && !this.hasExploded) {
 				this.explodeTree(node.children[0]);
 			} else {
 				return 0;
@@ -91,6 +93,8 @@ export class Tree {
 	}
 
 	explodeNumber(node: Node, position: number, value: number) {
+		if (this.hasExploded) return;
+
 		for (const [pos, val] of Object.entries(node.numbers)) {
 			if (parseInt(pos) === position) {
 				node.numbers[pos] += value;
@@ -102,53 +106,95 @@ export class Tree {
 		});
 	}
 
-	lastPos() {
-		this.getNewArray();
-		let positions = Object.keys(this.newOrder);
-		let intPpositions = positions.map((e) => parseInt(e));
-		let max = Math.max(...intPpositions);
-		return max;
-	}
-
-	// splitTree() {
-	// 	this.split();
-
-	// 	// if (typeof pos === "number") {
-	// 	// this.increasePos(this.tree, pos);
-	// 	// this.restorePosAfterSplit();
-	// 	// 	return true;
-	// 	// } else {
-	// 	// 	return false;
-	// 	// }
-	// }
-
+	hasSplit: boolean = false;
 	splitTree(node: Node = this.tree) {
-		for (const [pos, val] of Object.entries(node.numbers)) {
-			if ((val as any) > 9) {
-				let currentValue = val as any;
-				delete node.numbers[pos];
+		if (this.hasSplit) {
+			return;
+		}
+		if (node.children.length === 0 && Object.keys(node.numbers).length === 2) {
+			let pos = Object.keys(node.numbers).map((e: string) => parseInt(e));
+			pos = pos.sort((a: number, b: number) => a - b);
+			let splitPos = -1;
+			if (node.numbers[pos[0].toString()] > 9) splitPos = pos[0];
+			else if (node.numbers[pos[1].toString()] > 9) splitPos = pos[1];
+			if (splitPos >= 0) {
+				this.hasSplit = true;
+				let currentValue = node.numbers[splitPos.toString()];
+				delete node.numbers[splitPos.toString()];
 				let newNode = new Node();
 				newNode.level = node.level + 1;
-				newNode.numbers[pos] = Math.floor(currentValue / 2);
-				newNode.numbers[parseInt(pos) + "b"] = Math.round(currentValue / 2);
+				newNode.numbers[splitPos.toString()] = Math.floor(currentValue / 2);
+				newNode.numbers[splitPos.toString() + "b"] = Math.round(
+					currentValue / 2
+				);
 				node.children.push(newNode);
-				//console.log("i did split for + ", val, pos);
 
-				this.increasePos(this.tree, parseInt(pos));
+				this.increasePos(this.tree, splitPos);
 				this.restorePosAfterSplit();
 				return;
 			}
+		} else if (node.children.length === 1) {
+			let numberPos = Object.keys(node.numbers)[0];
+			let childPos1 = this.getNextPos(node.children[0]);
+
+			if (parseInt(numberPos) < childPos1) {
+				if (node.numbers[numberPos] > 9) {
+					this.hasSplit = true;
+
+					let currentValue = node.numbers[numberPos];
+					delete node.numbers[numberPos];
+					let newNode = new Node();
+					newNode.level = node.level + 1;
+					newNode.numbers[numberPos] = Math.floor(currentValue / 2);
+					newNode.numbers[parseInt(numberPos) + "b"] = Math.round(
+						currentValue / 2
+					);
+					node.children.push(newNode);
+
+					this.increasePos(this.tree, parseInt(numberPos));
+					this.restorePosAfterSplit();
+					return;
+				} else {
+					this.splitTree(node.children[0]);
+				}
+			} else {
+				this.splitTree(node.children[0]);
+				if (!this.hasSplit) {
+					if (node.numbers[numberPos] > 9) {
+						this.hasSplit = true;
+
+						let currentValue = node.numbers[numberPos];
+						delete node.numbers[numberPos];
+						let newNode = new Node();
+						newNode.level = node.level + 1;
+						newNode.numbers[numberPos] = Math.floor(currentValue / 2);
+						newNode.numbers[parseInt(numberPos) + "b"] = Math.round(
+							currentValue / 2
+						);
+						node.children.push(newNode);
+
+						this.increasePos(this.tree, parseInt(numberPos));
+						this.restorePosAfterSplit();
+						return;
+					}
+				}
+			}
+		} else if (node.children.length === 2) {
+			let childPos1 = this.getNextPos(node.children[0]);
+			let childPos2 = this.getNextPos(node.children[1]);
+			if (childPos1 < childPos2) {
+				this.splitTree(node.children[0]);
+				this.splitTree(node.children[1]);
+			} else {
+				this.splitTree(node.children[1]);
+				this.splitTree(node.children[0]);
+			}
 		}
-		node.children.forEach((element: any) => {
-			return this.splitTree(element);
-		});
 	}
 
 	removeNode(node: Node, pos1: number, pos2: number) {
-		//console.log(pos1, pos2);
 		node.children.forEach((childNode: any) => {
 			for (let i = 0; i < childNode.children.length; i++) {
-				//	console.log(childNode.children[i].numbers);
 				if (pos1 in childNode.children[i].numbers) {
 					childNode.children.splice(i, 1);
 					childNode.numbers[pos1] = 0;
@@ -160,6 +206,7 @@ export class Tree {
 	}
 
 	decreasePos(node: Node = this.tree, pos1: number) {
+		if (this.hasExploded) return;
 		for (const [pos, val] of Object.entries(node.numbers)) {
 			let numberPos = parseInt(pos);
 			if (numberPos > pos1) {
@@ -175,28 +222,26 @@ export class Tree {
 
 	restorePosAfterSplit(node: Node = this.tree) {
 		const keys = Object.keys(node.numbers);
-		// console.log(keys);
 		if (keys.length === 2) {
 			if (keys[1].includes("b")) {
-				// console.log(keys[1]);
 				let position1 = parseInt(keys[0]);
 				let position2 = keys[1];
 				let value2 = node.numbers[position2];
 				delete node.numbers[position2];
 				node.numbers[position1 + 1] = value2;
+				return;
 			}
 		}
 		node.children.forEach((element: any) => {
 			this.restorePosAfterSplit(element);
 		});
+		return;
 	}
 
 	increasePos(node: Node = this.tree, pos1: number) {
 		const keys = Object.keys(node.numbers);
-		//	console.log(keys);
 		if (keys.length === 1) {
 			let position = parseInt(keys[0]);
-			//	console.log(position, pos1);
 			if (position > pos1) {
 				let value = node.numbers[position];
 				delete node.numbers[position];
@@ -205,7 +250,6 @@ export class Tree {
 		} else if (keys.length === 2) {
 			let position1 = parseInt(keys[0]);
 			let position2 = parseInt(keys[1]);
-			//	console.log(position1, position2, pos1);
 			if (position1 > pos1) {
 				let value1 = node.numbers[position1];
 				let value2 = node.numbers[position2];
@@ -219,110 +263,6 @@ export class Tree {
 		node.children.forEach((element: any) => {
 			this.increasePos(element, pos1);
 		});
-	}
-
-	sortNewOrder = (order: any) => {
-		return Object.keys(order)
-			.sort()
-			.reduce((obj: any, key: string) => {
-				obj[key] = order[key];
-				return obj;
-			}, {});
-	};
-
-	parseString(): string {
-		this.getNewArray();
-		// console.log(this.newOrder);
-		let order = this.sortNewOrder(this.newOrder);
-		// console.log(order);
-		let newString: string = "[";
-		let currentLevel = 0;
-		let prevLevel = 0;
-		let levelDiff;
-		let c;
-		let prevC;
-		for (let val of Object.values(order)) {
-			c = (val as any).c;
-			if (c === 1) prevC = c;
-			let value = (val as any).value;
-			currentLevel = (val as any).level;
-			levelDiff = currentLevel - prevLevel;
-			// console.log(
-			// 	"c: " +
-			// 		c +
-			// 		", sameLevel: " +
-			// 		(c === prevC).toString() +
-			// 		", curr: " +
-			// 		currentLevel +
-			// 		", next: " +
-			// 		prevLevel +
-			// 		", diff: " +
-			// 		levelDiff
-			// );
-
-			if (c === prevC) {
-				if (levelDiff < 0) {
-					newString += value;
-					newString += "";
-				} else if (levelDiff > 0) {
-					newString += "[".repeat(levelDiff);
-					newString += value;
-					newString += "";
-				} else {
-					newString += ",";
-					newString += value;
-					newString += "]";
-				}
-			} else {
-				if (levelDiff < 0) {
-					newString += "],";
-
-					newString += value;
-					newString += "";
-				} else if (levelDiff > 0) {
-					newString += "[".repeat(levelDiff);
-					//newString += "],[";
-					newString += value;
-					//	newString += "";
-				} else {
-					newString += "],[";
-
-					newString += value;
-					newString += ",";
-				}
-			}
-
-			prevLevel = currentLevel;
-			//	console.log(newString);
-
-			//	if (levelDiff != 0) newString += "]".repeat(Math.abs(levelDiff));
-			// currentLevel = (val as any).level;
-			// console.log(currentLevel, val);
-			// newString += (val as any).value;
-			prevC = c;
-		}
-		levelDiff = -1 - currentLevel;
-		//console.log(currentLevel, levelDiff);
-		newString += "]".repeat(Math.abs(levelDiff));
-
-		//console.log(newString);
-		return newString;
-	}
-
-	getNewArray(node: Node = this.tree, newPos: number = 0, c: number = 0) {
-		for (const [pos, val] of Object.entries(node.numbers)) {
-			this.newOrder[pos] = { value: val, level: node.level, c };
-		}
-
-		node.children.forEach((element: any) => {
-			c++;
-			this.getNewArray(element, newPos + 1, c);
-		});
-	}
-
-	getNewInput() {
-		this.parseString();
-		return 1; //JSON.parse(this.parseString());
 	}
 
 	calculateMagnitude(node: Node = this.tree) {
@@ -358,7 +298,6 @@ export class Tree {
 	}
 
 	getNextPos(node: Node): number {
-		// console.log(node);
 		let keys = Object.keys(node.numbers);
 		if (keys.length > 0) {
 			return parseInt(keys[0]);
@@ -367,60 +306,41 @@ export class Tree {
 				return this.getNextPos(node.children[0]);
 			}
 		}
-		console.log(node);
-		console.log(999);
-		return 999;
+		return -1; // I should never reach this place
 	}
 
 	getArray(node: Node = this.tree): any {
 		const positions = Object.keys(node.numbers);
-		// console.log(positions);
 
 		let string = "";
 		if (positions.length === 2) {
-			// console.log("len = 2");
-			string += "[";
-			string += node.numbers[positions[0]].toString();
+			string += "[" + node.numbers[positions[0]].toString();
 			string += ",";
-			string += node.numbers[positions[1]].toString();
-			string += "]";
+			string += node.numbers[positions[1]].toString() + "]";
 		} else if (positions.length === 1) {
-			// console.log("len = 1");
 			let childPos = this.getNextPos(node.children[0]);
-			//console.log(node.children[0]);
+
 			if (parseInt(positions[0]) < childPos) {
-				string += "[";
-				string += node.numbers[positions[0]].toString();
+				string += "[" + node.numbers[positions[0]].toString();
 				string += ",";
-				string += this.getArray(node.children[0]);
-				string += "]";
+				string += this.getArray(node.children[0]) + "]";
 			} else {
-				string += "[";
-				string += this.getArray(node.children[0]);
+				string += "[" + this.getArray(node.children[0]);
 				string += ",";
-				string += node.numbers[positions[0]].toString();
-				string += "]";
+				string += node.numbers[positions[0]].toString() + "]";
 			}
 		} else {
-			// console.log("len = 0");
 			let childPos1 = this.getNextPos(node.children[0]);
 			let childPos2 = this.getNextPos(node.children[1]);
 
-			let childLevel1 = node.children[0].level;
-			let childLevel2 = node.children[1].level;
-
 			if (childPos1 < childPos2) {
-				string += "[";
-				string += this.getArray(node.children[0]);
+				string += "[" + this.getArray(node.children[0]);
 				string += ",";
-				string += this.getArray(node.children[1]);
-				string += "]";
+				string += this.getArray(node.children[1]) + "]";
 			} else {
-				string += "[";
-				string += this.getArray(node.children[1]);
+				string += "[" + this.getArray(node.children[1]);
 				string += ",";
-				string += this.getArray(node.children[0]);
-				string += "]";
+				string += this.getArray(node.children[0]) + "]";
 			}
 		}
 
