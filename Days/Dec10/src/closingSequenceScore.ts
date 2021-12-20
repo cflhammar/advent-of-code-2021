@@ -2,11 +2,11 @@ import { isCorrupt } from "./isCorrupt";
 
 export function closingSequenceScore(directions: Array<Array<string>>) {
 	let totalScore: Array<number> = [];
-	directions.map((row) => {
+	directions.forEach((row) => {
 		if (!isCorrupt(row)) {
 			let stack: Array<string> = [];
 
-			row.map((char) => {
+			row.forEach((char) => {
 				if (charIsOpening(char)) {
 					stack.unshift(char);
 				} else {

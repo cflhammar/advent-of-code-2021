@@ -1,5 +1,4 @@
 import { BottomCoordinates } from "./BottomCoordinates";
-import { Coordinate } from "./Coordinate";
 
 export class BottomScanner {
 	bottomCoordinates: BottomCoordinates;

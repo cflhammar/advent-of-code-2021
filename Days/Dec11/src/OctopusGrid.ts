@@ -52,14 +52,6 @@ export class OctopusGrid {
 		this.totalFlashes += this.countFlashes();
 	}
 
-	resetAll() {
-		this.grid.forEach((row) => {
-			row.forEach((octopus) => {
-				octopus.reset();
-			});
-		});
-	}
-
 	flash(x: number, y: number) {
 		for (let i = x - 1; i <= x + 1; i++) {
 			for (let k = y - 1; k <= y + 1; k++) {
@@ -75,6 +67,14 @@ export class OctopusGrid {
 				}
 			}
 		}
+	}
+
+	resetAll() {
+		this.grid.forEach((row) => {
+			row.forEach((octopus) => {
+				octopus.reset();
+			});
+		});
 	}
 
 	isWithinBoundaryAndNotCenter(

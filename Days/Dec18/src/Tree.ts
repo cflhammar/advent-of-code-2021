@@ -57,46 +57,35 @@ export class Tree {
 		return this.getArray();
 	}
 
-	explodeTree() {
-		//console.log("exploding!");
-		for (let l1 = 0; l1 < this.tree.children.length; l1++) {
-			let childs = this.tree.children[l1];
-			// console.log(childs);
+	explodeTree(node: Node = this.tree) { LETA EFTER LEVEL 4 MED LÄGST POSISället
+		if (node.level === 4) {
+			let explode = Object.entries(node.numbers)
+				.flat()
+				.map((e: any) => parseInt(e));
 
-			for (let l2 = 0; l2 < childs.children.length; l2++) {
-				let childs2 = childs.children[l2];
-				// console.log(l2, childs2.children[l2]);
-				for (let l3 = 0; l3 < childs2.children.length; l3++) {
-					let childs3 = childs2.children[l3];
-					// console.log(l3, childs3.children[l3]);
-					for (let l4 = 0; l4 < childs3.children.length; l4++) {
-						let numbersToExplode = Object.entries(childs3.children[l4].numbers)
-							.flat()
-							.map((e: any) => parseInt(e));
+			this.explodeNumber(this.tree, explode[0] - 1, explode[1]);
 
-						//	console.log("exploding!");
-						this.explodeNumber(
-							this.tree,
-							numbersToExplode[0] - 1,
-							numbersToExplode[1]
-						);
+			this.explodeNumber(this.tree, explode[2] + 1, explode[3]);
 
-						this.explodeNumber(
-							this.tree,
-							numbersToExplode[2] + 1,
-							numbersToExplode[3]
-						);
+			this.removeNode(this.tree, explode[0], explode[2]);
+			this.decreasePos(this.tree, explode[0]);
 
-						this.removeNode(
-							this.tree,
-							numbersToExplode[0],
-							numbersToExplode[2]
-						);
-						this.decreasePos(this.tree, numbersToExplode[0]);
-
-						return 1;
-					}
+			return 1;
+		} else {
+			if (node.children.length === 2) {
+				let childPos1 = this.getNextPos(node.children[0]);
+				let childPos2 = this.getNextPos(node.children[1]);
+				if (childPos1 < childPos2) {
+					this.explodeTree(node.children[0]);
+					this.explodeTree(node.children[1]);
+				} else {
+					this.explodeTree(node.children[1]);
+					this.explodeTree(node.children[0]);
 				}
+			} else if (node.children.length === 1) {
+				this.explodeTree(node.children[0]);
+			} else {
+				return 0;
 			}
 		}
 	}

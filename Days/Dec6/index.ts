@@ -1,5 +1,4 @@
-import { fishInput } from "./Input/inputTest";
-import { fishTestInput } from "./Input/inputTest";
+import { fishInput, fishTestInput } from "./Input/inputTest";
 import { FishSimulator } from "./src/FishSimulator";
 import { FishStim } from "./src/FishStim";
 

@@ -1,6 +1,6 @@
 export function syntaxErrorChecker(directions: Array<Array<string>>) {
 	let errorScore = 0;
-	directions.map((row) => {
+	directions.forEach((row) => {
 		let stack: Array<string> = [];
 
 		for (let k = 0; k < row.length; k++) {

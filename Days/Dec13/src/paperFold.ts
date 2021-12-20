@@ -4,24 +4,13 @@ export function paperFold(input: Array<Array<string>>) {
 	let numbers = input
 		.filter((row) => row.length > 1)
 		.map((e) => e.map((e) => parseInt(e)));
-	let folds = input
+	let temp = input
 		.filter((row) => row.length === 1 && row[0].length > 5)
 		.map((e) => e.map((e) => e.split(" ")));
-	let f = folds.map((e) => e.map((e) => e[2].split("=")));
 
-	// f.forEach((f) =>
-	// 	f.forEach((row) => {
-	// 		console.log(row);
-	// 		if ((row[0] = "x")) {
-	// 			console.log(row[1]);
-	// 			numbers = foldX(parseInt(row[1]), numbers);
-	// 		} else if ((row[0] = "y")) {
-	// 			console.log(row[1]);
-	// 			numbers = foldY(parseInt(row[1]), numbers);
-	// 		}
-	// 	})
-	// );
+	let folds = temp.map((e) => e.map((e) => e[2].split("=")));
 
+	console.log(folds);
 	numbers = foldX(655, numbers);
 	numbers = foldY(447, numbers);
 	numbers = foldX(327, numbers);
@@ -35,7 +24,7 @@ export function paperFold(input: Array<Array<string>>) {
 	numbers = foldY(13, numbers);
 	numbers = foldY(6, numbers);
 
-	printPatternToFile(numbers);
+	return printPatternToFile(numbers);
 }
 
 const foldY = (row: number, paper: number[][]): number[][] => {
