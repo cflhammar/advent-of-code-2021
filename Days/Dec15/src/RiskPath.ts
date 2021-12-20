@@ -1,3 +1,5 @@
+// Recursive function that checks all paths to find lowest risk
+// OUT OF MEMORY when input size increases
 export class RiskPath {
 	riskMap: number[][];
 	visitedTemplate: boolean[][] = [];
