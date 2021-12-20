@@ -7,7 +7,7 @@ export function part2(input: any) {
 			if (i != k) {
 				let array = [input[i], input[k]];
 				let tree = new Tree(array);
-				let next = tree.resolveTree();
+				let next = tree.reduce();
 				let magnitude = tree.calculateMagnitude();
 				if (magnitude > maximumMagnitude) maximumMagnitude = magnitude;
 			}

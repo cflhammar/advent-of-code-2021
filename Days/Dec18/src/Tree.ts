@@ -9,6 +9,8 @@ export class Tree {
 	}
 	newOrder: any = {};
 	found: boolean = false;
+	hasSplit: boolean = false;
+	hasExploded: boolean = false;
 
 	addNodes(node: Node, array: any, level: number = 1) {
 		array.forEach((element: any) => {
@@ -24,7 +26,7 @@ export class Tree {
 		});
 	}
 
-	resolveTree(): string {
+	reduce(): string {
 		let currenTree = JSON.stringify(this.tree);
 		let newTree;
 
@@ -58,7 +60,6 @@ export class Tree {
 		return this.getArray();
 	}
 
-	hasExploded: boolean = false;
 	explodeTree(node: Node = this.tree) {
 		if (this.hasExploded) {
 			return;
@@ -72,7 +73,7 @@ export class Tree {
 			this.removeNode(this.tree, explode[0], explode[2]);
 			this.decreasePos(this.tree, explode[0]);
 			this.hasExploded = true;
-			return 1;
+			return;
 		} else {
 			if (node.children.length === 2 && !this.hasExploded) {
 				let childPos1 = this.getNextPos(node.children[0]);
@@ -106,7 +107,6 @@ export class Tree {
 		});
 	}
 
-	hasSplit: boolean = false;
 	splitTree(node: Node = this.tree) {
 		if (this.hasSplit) {
 			return;
@@ -118,19 +118,7 @@ export class Tree {
 			if (node.numbers[pos[0].toString()] > 9) splitPos = pos[0];
 			else if (node.numbers[pos[1].toString()] > 9) splitPos = pos[1];
 			if (splitPos >= 0) {
-				this.hasSplit = true;
-				let currentValue = node.numbers[splitPos.toString()];
-				delete node.numbers[splitPos.toString()];
-				let newNode = new Node();
-				newNode.level = node.level + 1;
-				newNode.numbers[splitPos.toString()] = Math.floor(currentValue / 2);
-				newNode.numbers[splitPos.toString() + "b"] = Math.round(
-					currentValue / 2
-				);
-				node.children.push(newNode);
-
-				this.increasePos(this.tree, splitPos);
-				this.restorePosAfterSplit();
+				this.splitNode(node, splitPos.toString());
 				return;
 			}
 		} else if (node.children.length === 1) {
@@ -139,44 +127,15 @@ export class Tree {
 
 			if (parseInt(numberPos) < childPos1) {
 				if (node.numbers[numberPos] > 9) {
-					this.hasSplit = true;
-
-					let currentValue = node.numbers[numberPos];
-					delete node.numbers[numberPos];
-					let newNode = new Node();
-					newNode.level = node.level + 1;
-					newNode.numbers[numberPos] = Math.floor(currentValue / 2);
-					newNode.numbers[parseInt(numberPos) + "b"] = Math.round(
-						currentValue / 2
-					);
-					node.children.push(newNode);
-
-					this.increasePos(this.tree, parseInt(numberPos));
-					this.restorePosAfterSplit();
-					return;
+					this.splitNode(node, numberPos);
 				} else {
 					this.splitTree(node.children[0]);
 				}
 			} else {
 				this.splitTree(node.children[0]);
-				if (!this.hasSplit) {
-					if (node.numbers[numberPos] > 9) {
-						this.hasSplit = true;
-
-						let currentValue = node.numbers[numberPos];
-						delete node.numbers[numberPos];
-						let newNode = new Node();
-						newNode.level = node.level + 1;
-						newNode.numbers[numberPos] = Math.floor(currentValue / 2);
-						newNode.numbers[parseInt(numberPos) + "b"] = Math.round(
-							currentValue / 2
-						);
-						node.children.push(newNode);
-
-						this.increasePos(this.tree, parseInt(numberPos));
-						this.restorePosAfterSplit();
-						return;
-					}
+				if (node.numbers[numberPos] > 9 && !this.hasSplit) {
+					this.splitNode(node, numberPos);
+					return;
 				}
 			}
 		} else if (node.children.length === 2) {
@@ -189,6 +148,24 @@ export class Tree {
 				this.splitTree(node.children[1]);
 				this.splitTree(node.children[0]);
 			}
+		}
+	}
+
+	splitNode(node: Node, pos: string) {
+		if (!this.hasSplit) {
+			this.hasSplit = true;
+
+			let currentValue = node.numbers[pos];
+			delete node.numbers[pos];
+			let newNode = new Node();
+			newNode.level = node.level + 1;
+			newNode.numbers[pos] = Math.floor(currentValue / 2);
+			newNode.numbers[parseInt(pos) + "b"] = Math.round(currentValue / 2);
+			node.children.push(newNode);
+
+			this.increasePos(this.tree, parseInt(pos));
+			this.restorePosAfterSplit();
+			return;
 		}
 	}
 
@@ -314,19 +291,16 @@ export class Tree {
 
 		let string = "";
 		if (positions.length === 2) {
-			string += "[" + node.numbers[positions[0]].toString();
-			string += ",";
+			string += "[" + node.numbers[positions[0]].toString() + ",";
 			string += node.numbers[positions[1]].toString() + "]";
 		} else if (positions.length === 1) {
 			let childPos = this.getNextPos(node.children[0]);
 
 			if (parseInt(positions[0]) < childPos) {
-				string += "[" + node.numbers[positions[0]].toString();
-				string += ",";
+				string += "[" + node.numbers[positions[0]].toString() + ",";
 				string += this.getArray(node.children[0]) + "]";
 			} else {
-				string += "[" + this.getArray(node.children[0]);
-				string += ",";
+				string += "[" + this.getArray(node.children[0]) + ",";
 				string += node.numbers[positions[0]].toString() + "]";
 			}
 		} else {
@@ -334,12 +308,10 @@ export class Tree {
 			let childPos2 = this.getNextPos(node.children[1]);
 
 			if (childPos1 < childPos2) {
-				string += "[" + this.getArray(node.children[0]);
-				string += ",";
+				string += "[" + this.getArray(node.children[0]) + ",";
 				string += this.getArray(node.children[1]) + "]";
 			} else {
-				string += "[" + this.getArray(node.children[1]);
-				string += ",";
+				string += "[" + this.getArray(node.children[1]) + ",";
 				string += this.getArray(node.children[0]) + "]";
 			}
 		}

@@ -11,7 +11,7 @@ let b = [1, 1];
 
 let array = [a, b];
 let tree = new Tree(array);
-let next = tree.resolveTree();
+let next = tree.reduce();
 console.log(
 	(next === "[[[[0,7],4],[[7,8],[6,0]]],[8,1]]") +
 		"<- Basic split/explode in correct order:"
