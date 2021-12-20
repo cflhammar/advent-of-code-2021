@@ -5,7 +5,7 @@ import { ProcessImage } from "./src/processImage";
 
 let image;
 let algorithm;
-const test = true;
+const test = false;
 
 if (test) {
 	image = readImage("testImage.txt", 200);
