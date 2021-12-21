@@ -20,17 +20,21 @@ export class DiracDice {
 		while (mostRecentTotalScore < maxScore) {
 			let steps = dice.roll() + dice.roll() + dice.roll();
 
-			const currentPosition = this.players[player].position;
-			const newPosition = ((currentPosition + steps - 1) % 10) + 1;
-
-			this.players[player].position = newPosition;
-			this.players[player].score += newPosition;
+			this.players[player].position = this.newPosition(
+				this.players[player].position,
+				steps
+			);
+			this.players[player].score += this.players[player].position;
 
 			mostRecentTotalScore = this.players[player].score;
 			player = (player + 1) % 2;
 		}
 
 		return this.players[player].score * dice.rolls;
+	}
+
+	newPosition(from: number, steps: number) {
+		return ((from + steps - 1) % 10) + 1;
 	}
 }
 
