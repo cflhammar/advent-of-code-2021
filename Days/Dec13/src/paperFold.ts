@@ -10,7 +10,6 @@ export function paperFold(input: Array<Array<string>>) {
 
 	let folds = temp.map((e) => e.map((e) => e[2].split("=")));
 
-	console.log(folds);
 	numbers = foldX(655, numbers);
 	numbers = foldY(447, numbers);
 	numbers = foldX(327, numbers);
@@ -64,7 +63,6 @@ const printPatternToFile = (paper: number[][]) => {
 		}
 	}
 
-	console.log(paper);
 	for (let i = 0; i < paper.length; i++) {
 		coordinates[paper[i][1]][paper[i][0]] = "0";
 	}
