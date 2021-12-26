@@ -9,7 +9,6 @@ export class SeaBottom {
 		let counter = 0;
 		while (true) {
 			counter++;
-			console.log(counter);
 			const nextSeaBottom = this.next();
 			if (JSON.stringify(this.seaBottom) === JSON.stringify(nextSeaBottom)) {
 				return counter;
@@ -36,7 +35,7 @@ export class SeaBottom {
 	}
 
 	nextEast(seaBottom: string[][]) {
-		let nextStep = this.createNextTemplate();
+		let nextStep: string[][] = this.createNextTemplate();
 
 		for (let y = 0; y < seaBottom.length; y++) {
 			for (let x = 0; x < seaBottom[0].length; x++) {
@@ -68,7 +67,7 @@ export class SeaBottom {
 	}
 
 	nextSouth(seaBottom: string[][] = this.seaBottom) {
-		let nextStep = this.createNextTemplate();
+		let nextStep: string[][] = this.createNextTemplate();
 
 		for (let y = 0; y < seaBottom.length; y++) {
 			for (let x = 0; x < seaBottom[0].length; x++) {
