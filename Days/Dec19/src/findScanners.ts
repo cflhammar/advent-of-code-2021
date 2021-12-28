@@ -3,18 +3,8 @@ import { rotations } from "./Rotations";
 import { Scanner } from "./Scanner";
 
 export function findScanners(input: number[][][]) {
-	let scanners: Scanner[] = [];
 	let knownScannerIds: number[] = [];
-
-	input.forEach((scannerPositions, id) => {
-		let scanner = new Scanner(id);
-		scannerPositions.forEach((position, x) => {
-			if (x > 0) {
-				scanner.addPointFromPosition(position);
-			}
-		});
-		scanners.push(scanner);
-	});
+	let scanners: Scanner[] = populateScanners(input);
 
 	const baseScanner = scanners[0];
 	while (knownScannerIds.length < scanners.length - 1) {
@@ -49,9 +39,9 @@ export function findScanners(input: number[][][]) {
 						if (distances.get(identifier) >= 12) {
 							targetScanner.adjust(rotation, distance);
 							targetScanner.beacons.forEach((p) => baseScanner.addPoint(p));
-							found = true;
 							targetScanner.knownPosition = JSON.parse(identifier);
 							knownScannerIds.push(scannerId);
+							found = true;
 							break;
 						}
 					}
@@ -89,4 +79,18 @@ const longestManhattanDist = (scanners: Scanner[]) => {
 		});
 	});
 	return longestDistance;
+};
+
+const populateScanners = (input: number[][][]) => {
+	let scanners: Scanner[] = [];
+	input.forEach((scannerPositions, id) => {
+		let scanner = new Scanner(id);
+		scannerPositions.forEach((position, x) => {
+			if (x > 0) {
+				scanner.addPointFromPosition(position);
+			}
+		});
+		scanners.push(scanner);
+	});
+	return scanners;
 };
