@@ -3,7 +3,6 @@ import { Operations } from "./Operations";
 export class ALU {
 	numbers: any;
 	modelNumber: string;
-	//modelNumberPos: number;
 	instructions: string[];
 
 	constructor(modelNumber: string, instructions: string[]) {
@@ -18,7 +17,6 @@ export class ALU {
 		this.instructions.forEach((row, x) => {
 			let operation = row[0];
 			let variable = row[1];
-			//	console.log("operation:" + operation, "variable:" + variable);
 
 			if (operation === "inp") {
 				(this.numbers as any)[variable] = parseInt(
@@ -28,14 +26,11 @@ export class ALU {
 			} else {
 				let p = row[2];
 				let parameter;
-				//	console.log("parameter before  " + p);
+
 				if (isNaN(parseInt(p))) {
-					//		console.log("parameter letter:  " + p);
 					parameter = this.numbers[p];
-					//		console.log("parameter from state " + parameter);
 				} else {
 					parameter = parseInt(p);
-					//		console.log("parameter number " + parameter);
 				}
 
 				switch (operation) {
@@ -71,12 +66,9 @@ export class ALU {
 						break;
 				}
 			}
-			//console.log(this.numbers);
 		});
 	}
 	isValid() {
-		// console.log(this.numbers);
-		// console.log(this.numbers["z"]);
 		return this.numbers["z"] === 0;
 	}
 }

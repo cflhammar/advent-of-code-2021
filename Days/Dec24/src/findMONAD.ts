@@ -10,14 +10,12 @@ export function findMONAD(instructions: any) {
 		let tryNumberAsString = tryNumber.toString();
 		if (tryNumberAsString.includes("0")) continue;
 		else {
-			// console.log(tryNumber);
 			let aluProgram = new ALU(tryNumberAsString, instructions);
 			aluProgram.process();
 			if (aluProgram.isValid()) {
 				break;
 			}
 		}
-		// break;
 	}
 	console.log(tryNumber);
 }

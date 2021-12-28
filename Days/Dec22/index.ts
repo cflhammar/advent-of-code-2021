@@ -6,3 +6,5 @@ let input2 = readInput("input2.txt");
 
 console.log("Task1:", handleReactor(input));
 console.log("Task2: ", handleReactor(input2));
+
+// with inspiration from DrunkHacker @ Reddit/AoE
