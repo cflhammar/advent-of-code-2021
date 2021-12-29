@@ -1,1 +1,3 @@
-no need to read me
+Advent of Code 2021
+All days solved
+Typescript
